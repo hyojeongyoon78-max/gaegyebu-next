@@ -6,13 +6,13 @@ import { fmt } from '@/lib/utils';
 interface Props {
   transactions: Transaction[];
   budgets: Record<string, number>;
-  setBudgets: (val: Record<string, number> | ((prev: Record<string, number>) => Record<string, number>)) => void;
+  setBudget: (monthKey: string, amount: number) => void;
   monthKey: string;
   monthLabel: string;
   onChangeMonth: (delta: number) => void;
 }
 
-export function BudgetCard({ transactions, budgets, setBudgets, monthKey, monthLabel, onChangeMonth }: Props) {
+export function BudgetCard({ transactions, budgets, setBudget, monthKey, monthLabel, onChangeMonth }: Props) {
   const [input, setInput] = useState('');
 
   const budget = budgets[monthKey] ?? 0;
@@ -30,7 +30,7 @@ export function BudgetCard({ transactions, budgets, setBudgets, monthKey, monthL
   const handleSet = () => {
     const val = parseInt(input);
     if (!val || val <= 0) { alert('올바른 예산을 입력해주세요.'); return; }
-    setBudgets(prev => ({ ...prev, [monthKey]: val }));
+    setBudget(monthKey, val);
     setInput('');
   };
 

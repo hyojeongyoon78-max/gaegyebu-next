@@ -20,7 +20,7 @@ export function TransactionForm({ allCats, onAdd }: Props) {
     if (!amt || amt <= 0)  { alert('올바른 금액을 입력해주세요.'); return; }
     if (!date)             { alert('날짜를 선택해주세요.'); return; }
 
-    onAdd({ type, desc: desc.trim(), amount: amt, date, category: type === 'expense' ? category : null });
+    onAdd({ type, description: desc.trim(), amount: amt, date, category: type === 'expense' ? category : null });
     setDesc('');
     setAmount('');
     setDate(new Date().toISOString().split('T')[0]);

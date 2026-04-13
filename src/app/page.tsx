@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { useGaegyebu } from '@/hooks/useGaegyebu';
 import { BalanceCard } from '@/components/BalanceCard';
 import { SummaryCards } from '@/components/SummaryCards';
 import { BudgetCard } from '@/components/BudgetCard';
@@ -8,12 +8,21 @@ import { TransactionForm } from '@/components/TransactionForm';
 import { CategoryManager } from '@/components/CategoryManager';
 import { TransactionList } from '@/components/TransactionList';
 import { DEFAULT_CATS, CAT_PALETTE } from '@/lib/constants';
-import type { Transaction, Category } from '@/lib/types';
+import type { Category } from '@/lib/types';
 
 export default function Home() {
-  const [transactions, setTransactions] = useLocalStorage<Transaction[]>('transactions', []);
-  const [budgets, setBudgets]           = useLocalStorage<Record<string, number>>('budgets', {});
-  const [customCats, setCustomCats]     = useLocalStorage<Category[]>('customCats', []);
+  const {
+    loading,
+    transactions,
+    budgets,
+    customCats,
+    addTransaction,
+    removeTransaction,
+    clearMonthTransactions,
+    setBudget,
+    addCategory,
+    removeCategory,
+  } = useGaegyebu();
 
   const today = new Date();
   const [viewYear,  setViewYear]  = useState(today.getFullYear());
@@ -43,27 +52,19 @@ export default function Home() {
   const income  = transactions.filter(t => t.type === 'income') .reduce((s, t) => s + t.amount, 0);
   const expense = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
 
-  /* ── 거래 ── */
-  const addTransaction = (tx: Omit<Transaction, 'id'>) =>
-    setTransactions(prev => [{ ...tx, id: Date.now() }, ...prev]);
-
-  const deleteTransaction = (id: number) =>
-    setTransactions(prev => prev.filter(t => t.id !== id));
-
-  const clearMonthTransactions = () =>
-    setTransactions(prev => prev.filter(t => !t.date.startsWith(monthKey())));
-
-  /* ── 카테고리 ── */
-  const addCategory = (name: string) => {
+  /* ── 카테고리 추가 ── */
+  const handleAddCategory = (name: string) => {
     const col = CAT_PALETTE[customCats.length % CAT_PALETTE.length];
-    setCustomCats(prev => [...prev, { name, emoji: '📌', ...col }]);
+    addCategory({ name, emoji: '📌', ...col });
   };
 
-  const deleteCategory = (name: string) => {
-    setCustomCats(prev => prev.filter(c => c.name !== name));
-    setTransactions(prev => prev.map(t => t.category === name ? { ...t, category: '기타' } : t));
-    if (activeCategory === name) setActiveCategory(null);
-  };
+  if (loading) {
+    return (
+      <main className="min-h-screen flex items-center justify-center" style={{ background: '#f5efe6' }}>
+        <p className="font-body text-sm" style={{ color: '#c4ae8a' }}>불러오는 중...</p>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen py-8 px-4" style={{ background: '#f5efe6' }}>
@@ -78,7 +79,7 @@ export default function Home() {
         <BudgetCard
           transactions={transactions}
           budgets={budgets}
-          setBudgets={setBudgets}
+          setBudget={setBudget}
           monthKey={monthKey()}
           monthLabel={monthLabel()}
           onChangeMonth={changeMonth}
@@ -89,8 +90,8 @@ export default function Home() {
         <CategoryManager
           allCats={allCats()}
           defaultCats={DEFAULT_CATS}
-          onAdd={addCategory}
-          onDelete={deleteCategory}
+          onAdd={handleAddCategory}
+          onDelete={removeCategory}
         />
 
         <TransactionList
@@ -101,8 +102,8 @@ export default function Home() {
           getCat={getCat}
           activeCategory={activeCategory}
           onFilterCat={setActiveCategory}
-          onDelete={deleteTransaction}
-          onClearAll={clearMonthTransactions}
+          onDelete={removeTransaction}
+          onClearAll={() => clearMonthTransactions(monthKey())}
         />
       </div>
     </main>
