@@ -6,9 +6,9 @@ interface Props {
 
 export function BalanceCard({ balance }: Props) {
   return (
-    <div className="bg-blue-500 text-white rounded-2xl p-6 text-center mb-4 shadow-lg shadow-blue-200">
-      <p className="text-sm opacity-85 mb-1">현재 잔액</p>
-      <p className="text-4xl font-bold">{fmt(balance)}</p>
+    <div className="bg-white rounded-2xl border border-gray-100 px-8 py-8 text-center mb-3">
+      <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-3">현재 잔액</p>
+      <p className="text-5xl font-bold text-gray-900 tracking-tight">{fmt(balance)}</p>
     </div>
   );
 }

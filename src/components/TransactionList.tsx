@@ -27,22 +27,24 @@ export function TransactionList({
   };
 
   return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm">
-      <div className="flex justify-between items-center mb-3">
-        <h2 className="text-base font-semibold text-slate-600">{monthLabel} 거래 내역</h2>
-        <button onClick={handleClear} className="text-xs text-slate-400 hover:text-red-400 transition-colors">
+    <div className="bg-white rounded-2xl border border-gray-100 p-6">
+
+      {/* 헤더 */}
+      <div className="flex justify-between items-center mb-4">
+        <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">{monthLabel} 내역</p>
+        <button onClick={handleClear} className="text-xs text-gray-300 hover:text-rose-400 transition-colors">
           전체 삭제
         </button>
       </div>
 
       {/* 카테고리 필터 */}
-      <div className="flex flex-wrap gap-1.5 mb-4">
+      <div className="flex flex-wrap gap-1.5 mb-5">
         <button
           onClick={() => onFilterCat(null)}
-          className={`px-3 py-1 rounded-full border text-xs transition-all ${
+          className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
             activeCategory === null
-              ? 'bg-blue-500 border-blue-500 text-white font-semibold'
-              : 'border-slate-200 text-slate-500 hover:border-blue-300'
+              ? 'bg-gray-900 text-white'
+              : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
           }`}
         >
           전체
@@ -51,10 +53,10 @@ export function TransactionList({
           <button
             key={c.name}
             onClick={() => onFilterCat(c.name)}
-            className={`px-3 py-1 rounded-full border text-xs transition-all ${
+            className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
               activeCategory === c.name
-                ? 'bg-blue-500 border-blue-500 text-white font-semibold'
-                : 'border-slate-200 text-slate-500 hover:border-blue-300'
+                ? 'bg-gray-900 text-white'
+                : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
             }`}
           >
             {c.emoji} {c.name}
@@ -62,39 +64,52 @@ export function TransactionList({
         ))}
       </div>
 
+      {/* 목록 */}
       {txs.length === 0 ? (
-        <p className="text-center text-slate-400 py-8 text-sm">내역이 없습니다.</p>
+        <p className="text-center text-gray-300 py-10 text-sm">내역이 없습니다</p>
       ) : (
-        <ul>
-          {txs.map(t => {
+        <ul className="space-y-0">
+          {txs.map((t, i) => {
             const cat = t.category ? getCat(t.category) : null;
             return (
-              <li key={t.id} className="flex items-center gap-3 py-3 border-b border-slate-50 last:border-none">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0 ${
-                  t.type === 'income' ? 'bg-green-50' : 'bg-red-50'
+              <li
+                key={t.id}
+                className={`flex items-center gap-4 py-3.5 ${i !== txs.length - 1 ? 'border-b border-gray-50' : ''}`}
+              >
+                {/* 아이콘 */}
+                <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-base shrink-0 ${
+                  t.type === 'income' ? 'bg-emerald-50' : 'bg-rose-50'
                 }`}>
-                  {t.type === 'income' ? '💰' : '💸'}
+                  {t.type === 'income' ? '↑' : '↓'}
                 </div>
+
+                {/* 정보 */}
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-slate-700 truncate">{t.desc}</p>
-                  <div className="flex items-center gap-1.5 mt-0.5">
-                    <span className="text-xs text-slate-400">{t.date}</span>
+                  <p className="text-sm font-medium text-gray-800 truncate">{t.desc}</p>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <span className="text-xs text-gray-400">{t.date}</span>
                     {cat && (
                       <span
-                        className="text-[11px] font-semibold px-2 py-0.5 rounded-full"
+                        className="text-[10px] font-semibold px-1.5 py-0.5 rounded-md"
                         style={{ background: cat.bg, color: cat.color }}
                       >
-                        {cat.emoji} {cat.name}
+                        {cat.name}
                       </span>
                     )}
                   </div>
                 </div>
-                <span className={`text-sm font-bold shrink-0 ${t.type === 'income' ? 'text-green-600' : 'text-red-500'}`}>
+
+                {/* 금액 */}
+                <span className={`text-sm font-semibold shrink-0 ${
+                  t.type === 'income' ? 'text-emerald-600' : 'text-gray-800'
+                }`}>
                   {t.type === 'income' ? '+' : '-'}{fmt(t.amount)}
                 </span>
+
+                {/* 삭제 */}
                 <button
                   onClick={() => onDelete(t.id)}
-                  className="text-slate-300 hover:text-red-400 transition-colors text-base px-1 shrink-0"
+                  className="text-gray-200 hover:text-rose-400 transition-colors text-sm shrink-0"
                 >
                   ✕
                 </button>

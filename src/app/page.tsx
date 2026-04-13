@@ -66,9 +66,9 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-100 py-6 px-4">
+    <main className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-lg mx-auto">
-        <h1 className="text-3xl font-bold text-center text-slate-700 mb-6">가계부</h1>
+        <h1 className="text-xl font-bold text-center text-gray-900 tracking-tight mb-6">가계부</h1>
 
         <BalanceCard balance={income - expense} />
 

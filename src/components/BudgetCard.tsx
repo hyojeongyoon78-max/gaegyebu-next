@@ -24,8 +24,8 @@ export function BudgetCard({ transactions, budgets, setBudgets, monthKey, monthL
   const remain = budget - monthExpense;
   const level  = pct >= 100 ? 'over' : pct >= 80 ? 'warn' : 'safe';
 
-  const barColor  = level === 'over' ? 'bg-red-500'    : level === 'warn' ? 'bg-orange-400' : 'bg-green-500';
-  const textColor = level === 'over' ? 'text-red-500'  : level === 'warn' ? 'text-orange-400' : 'text-green-600';
+  const barColor  = level === 'over' ? 'bg-rose-400'    : level === 'warn' ? 'bg-amber-400' : 'bg-emerald-400';
+  const textColor = level === 'over' ? 'text-rose-500'  : level === 'warn' ? 'text-amber-500' : 'text-emerald-600';
 
   const handleSet = () => {
     const val = parseInt(input);
@@ -35,48 +35,59 @@ export function BudgetCard({ transactions, budgets, setBudgets, monthKey, monthL
   };
 
   return (
-    <div className="bg-white rounded-2xl p-5 mb-5 shadow-sm">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-base font-semibold text-slate-600">월별 예산</h2>
-        <div className="flex items-center gap-1">
-          <button onClick={() => onChangeMonth(-1)} className="text-xl text-slate-400 hover:bg-slate-100 w-8 h-8 rounded-lg flex items-center justify-center">‹</button>
-          <span className="text-sm font-semibold text-slate-700 min-w-[88px] text-center">{monthLabel}</span>
-          <button onClick={() => onChangeMonth(1)}  className="text-xl text-slate-400 hover:bg-slate-100 w-8 h-8 rounded-lg flex items-center justify-center">›</button>
+    <div className="bg-white rounded-2xl border border-gray-100 p-6 mb-3">
+
+      {/* 헤더 */}
+      <div className="flex justify-between items-center mb-5">
+        <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">월별 예산</p>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => onChangeMonth(-1)}
+            className="w-7 h-7 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-gray-600 transition-colors text-lg"
+          >‹</button>
+          <span className="text-sm font-semibold text-gray-700 min-w-[88px] text-center">{monthLabel}</span>
+          <button
+            onClick={() => onChangeMonth(1)}
+            className="w-7 h-7 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-gray-600 transition-colors text-lg"
+          >›</button>
         </div>
       </div>
 
+      {/* 입력 */}
       <div className="flex gap-2 mb-4">
         <input
           type="number"
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && handleSet()}
-          placeholder="이번 달 예산 입력 (원)"
-          className="flex-1 px-3 py-2.5 border border-slate-200 rounded-lg text-sm outline-none focus:border-blue-400"
+          placeholder="예산 금액 입력 (원)"
+          className="flex-1 px-3 py-2.5 bg-gray-50 border-0 rounded-xl text-sm text-gray-700 placeholder-gray-300 outline-none focus:ring-2 focus:ring-indigo-100 focus:bg-white transition-all"
         />
-        <button onClick={handleSet} className="px-4 py-2.5 bg-blue-500 text-white rounded-lg text-sm font-semibold hover:bg-blue-600 whitespace-nowrap transition-colors">
+        <button
+          onClick={handleSet}
+          className="px-4 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-medium hover:bg-gray-700 whitespace-nowrap transition-colors"
+        >
           설정
         </button>
       </div>
 
+      {/* 상태 */}
       {budget > 0 ? (
-        <div className="bg-slate-50 rounded-xl p-4">
-          <div className="flex justify-between text-sm text-slate-600 mb-1.5">
-            <span>이번 달 예산</span><span className="font-semibold">{fmt(budget)}</span>
+        <div>
+          <div className="flex justify-between text-xs text-gray-500 mb-1">
+            <span>지출 {fmt(monthExpense)}</span>
+            <span>예산 {fmt(budget)}</span>
           </div>
-          <div className="flex justify-between text-sm text-slate-600 mb-3">
-            <span>이번 달 지출</span><span className="font-semibold">{fmt(monthExpense)}</span>
+          <div className="bg-gray-100 rounded-full h-1.5 overflow-hidden mb-2">
+            <div className={`h-full rounded-full transition-all duration-700 ${barColor}`} style={{ width: `${pct}%` }} />
           </div>
-          <div className="bg-slate-200 rounded-full h-2.5 overflow-hidden mb-2">
-            <div className={`h-full rounded-full transition-all duration-500 ${barColor}`} style={{ width: `${pct}%` }} />
-          </div>
-          <p className={`text-right text-xs font-semibold ${textColor}`}>
-            {remain >= 0 ? `남은 예산 ${fmt(remain)}` : `예산 초과 ${fmt(-remain)}`}
-            {' '}({Math.round((monthExpense / budget) * 100)}%)
+          <p className={`text-right text-xs font-medium ${textColor}`}>
+            {remain >= 0 ? `${fmt(remain)} 남음` : `${fmt(-remain)} 초과`}
+            <span className="text-gray-300 ml-1">({Math.round(pct)}%)</span>
           </p>
         </div>
       ) : (
-        <p className="text-center text-slate-400 text-sm py-1">예산이 설정되지 않았습니다.</p>
+        <p className="text-xs text-gray-300 text-center py-1">예산을 설정해보세요</p>
       )}
     </div>
   );
