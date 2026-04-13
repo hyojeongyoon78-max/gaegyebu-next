@@ -66,9 +66,10 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 py-8 px-4">
+    <main className="min-h-screen py-8 px-4" style={{ background: '#f5efe6' }}>
       <div className="max-w-lg mx-auto">
-        <h1 className="text-xl font-bold text-center text-gray-900 tracking-tight mb-6">가계부</h1>
+        <h1 className="font-display text-2xl font-bold text-center mb-1" style={{ color: '#3d2410' }}>가계부</h1>
+        <p className="font-body text-center text-xs tracking-[0.3em] uppercase mb-7" style={{ color: '#c4ae8a' }}>My Ledger</p>
 
         <BalanceCard balance={income - expense} />
 

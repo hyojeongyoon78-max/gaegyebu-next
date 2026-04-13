@@ -26,31 +26,35 @@ export function TransactionForm({ allCats, onAdd }: Props) {
     setDate(new Date().toISOString().split('T')[0]);
   };
 
-  const inputClass = "w-full px-3 py-2.5 bg-gray-50 border-0 rounded-xl text-sm text-gray-700 placeholder-gray-300 outline-none focus:ring-2 focus:ring-indigo-100 focus:bg-white transition-all";
+  const inputStyle = {
+    background: '#ede8df',
+    border: '1px solid #d4c9b5',
+    color: '#3d2410',
+  };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-6 mb-3">
-      <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-4">내역 추가</p>
+    <div className="bg-amber-50 border border-amber-200 rounded-sm p-6 mb-3 shadow-sm">
+      <p className="font-display text-xs tracking-[0.2em] uppercase mb-4" style={{ color: '#a07850' }}>내역 추가</p>
 
-      {/* 수입 / 지출 토글 */}
-      <div className="flex bg-gray-50 rounded-xl p-1 gap-1 mb-4">
+      {/* 수입 / 지출 토글 — 도장 느낌 */}
+      <div className="flex gap-2 mb-4">
         <button
           onClick={() => setType('income')}
-          className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${
-            type === 'income'
-              ? 'bg-white text-emerald-600 shadow-sm'
-              : 'text-gray-400 hover:text-gray-600'
-          }`}
+          className="flex-1 py-2.5 rounded-sm text-sm font-semibold transition-all font-display tracking-wide"
+          style={type === 'income'
+            ? { background: '#3a6b35', color: '#f0f7ef', border: '1px solid #2d5229' }
+            : { background: 'transparent', color: '#a07850', border: '1px solid #d4c9b5' }
+          }
         >
           수입
         </button>
         <button
           onClick={() => setType('expense')}
-          className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${
-            type === 'expense'
-              ? 'bg-white text-rose-500 shadow-sm'
-              : 'text-gray-400 hover:text-gray-600'
-          }`}
+          className="flex-1 py-2.5 rounded-sm text-sm font-semibold transition-all font-display tracking-wide"
+          style={type === 'expense'
+            ? { background: '#8b3a2a', color: '#fff5f2', border: '1px solid #6b2a1e' }
+            : { background: 'transparent', color: '#a07850', border: '1px solid #d4c9b5' }
+          }
         >
           지출
         </button>
@@ -61,9 +65,10 @@ export function TransactionForm({ allCats, onAdd }: Props) {
         type="text"
         value={desc}
         onChange={e => setDesc(e.target.value)}
-        placeholder="내용"
+        placeholder="내용을 적어주세요"
         maxLength={30}
-        className={`${inputClass} mb-2.5`}
+        className="w-full px-3 py-2.5 rounded-sm text-sm outline-none mb-2.5 font-body transition-all focus:ring-1"
+        style={{ ...inputStyle, '--tw-ring-color': '#c4ae8a' } as React.CSSProperties}
       />
 
       {/* 카테고리 */}
@@ -71,7 +76,8 @@ export function TransactionForm({ allCats, onAdd }: Props) {
         <select
           value={category}
           onChange={e => setCategory(e.target.value)}
-          className={`${inputClass} mb-2.5`}
+          className="w-full px-3 py-2.5 rounded-sm text-sm outline-none mb-2.5 font-body"
+          style={inputStyle}
         >
           {allCats.map(c => (
             <option key={c.name} value={c.name}>{c.emoji} {c.name}</option>
@@ -88,21 +94,26 @@ export function TransactionForm({ allCats, onAdd }: Props) {
           onKeyDown={e => e.key === 'Enter' && handleAdd()}
           placeholder="금액 (원)"
           min={0}
-          className="flex-1 px-3 py-2.5 bg-gray-50 border-0 rounded-xl text-sm text-gray-700 placeholder-gray-300 outline-none focus:ring-2 focus:ring-indigo-100 focus:bg-white transition-all"
+          className="flex-1 px-3 py-2.5 rounded-sm text-sm outline-none font-body"
+          style={inputStyle}
         />
         <input
           type="date"
           value={date}
           onChange={e => setDate(e.target.value)}
-          className="flex-1 px-3 py-2.5 bg-gray-50 border-0 rounded-xl text-sm text-gray-700 outline-none focus:ring-2 focus:ring-indigo-100 focus:bg-white transition-all"
+          className="flex-1 px-3 py-2.5 rounded-sm text-sm outline-none font-body"
+          style={inputStyle}
         />
       </div>
 
       <button
         onClick={handleAdd}
-        className="w-full py-2.5 bg-gray-900 text-white rounded-xl text-sm font-medium hover:bg-gray-700 transition-colors"
+        className="w-full py-2.5 rounded-sm text-sm font-semibold transition-colors font-display tracking-widest uppercase"
+        style={{ background: '#6b4c2a', color: '#fef9f0', letterSpacing: '0.15em' }}
+        onMouseEnter={e => (e.currentTarget.style.background = '#8b6035')}
+        onMouseLeave={e => (e.currentTarget.style.background = '#6b4c2a')}
       >
-        추가하기
+        기록하기
       </button>
     </div>
   );

@@ -22,14 +22,17 @@ export function CategoryManager({ allCats, defaultCats, onAdd, onDelete }: Props
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 px-6 py-5 mb-3">
+    <div className="bg-amber-50 border border-amber-200 rounded-sm px-6 py-5 mb-3 shadow-sm">
       <div className="flex justify-between items-center">
-        <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">카테고리</p>
+        <p className="font-display text-xs tracking-[0.2em] uppercase" style={{ color: '#a07850' }}>카테고리</p>
         <button
           onClick={() => setOpen(o => !o)}
-          className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
+          className="font-body text-xs transition-colors"
+          style={{ color: '#c4ae8a' }}
+          onMouseEnter={e => (e.currentTarget.style.color = '#8b6035')}
+          onMouseLeave={e => (e.currentTarget.style.color = '#c4ae8a')}
         >
-          {open ? '접기' : '관리'}
+          {open ? '접기 ▴' : '관리 ▾'}
         </button>
       </div>
 
@@ -41,8 +44,8 @@ export function CategoryManager({ allCats, defaultCats, onAdd, onDelete }: Props
               return (
                 <div
                   key={c.name}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium"
-                  style={{ background: c.bg, color: c.color }}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm text-xs font-body"
+                  style={{ background: c.bg, color: c.color, border: `1px solid ${c.color}30` }}
                 >
                   {c.emoji} {c.name}
                   {!isDefault && (
@@ -53,9 +56,7 @@ export function CategoryManager({ allCats, defaultCats, onAdd, onDelete }: Props
                         }
                       }}
                       className="opacity-50 hover:opacity-100 text-[9px] leading-none ml-0.5"
-                    >
-                      ✕
-                    </button>
+                    >✕</button>
                   )}
                 </div>
               );
@@ -70,11 +71,15 @@ export function CategoryManager({ allCats, defaultCats, onAdd, onDelete }: Props
               onKeyDown={e => e.key === 'Enter' && handleAdd()}
               placeholder="새 카테고리 이름"
               maxLength={10}
-              className="flex-1 px-3 py-2 bg-gray-50 border-0 rounded-xl text-sm text-gray-700 placeholder-gray-300 outline-none focus:ring-2 focus:ring-indigo-100 focus:bg-white transition-all"
+              className="flex-1 px-3 py-2 rounded-sm text-sm outline-none font-body"
+              style={{ background: '#ede8df', border: '1px solid #d4c9b5', color: '#3d2410' }}
             />
             <button
               onClick={handleAdd}
-              className="px-4 py-2 bg-gray-900 text-white rounded-xl text-sm font-medium hover:bg-gray-700 whitespace-nowrap transition-colors"
+              className="px-4 py-2 rounded-sm text-sm font-semibold whitespace-nowrap font-display"
+              style={{ background: '#6b4c2a', color: '#fef9f0' }}
+              onMouseEnter={e => (e.currentTarget.style.background = '#8b6035')}
+              onMouseLeave={e => (e.currentTarget.style.background = '#6b4c2a')}
             >
               추가
             </button>
